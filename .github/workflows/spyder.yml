@@ -1,0 +1,39 @@
+name: Run Spider
+
+on:
+  schedule:
+    - cron: '0 2 * * *'   # 每天台灣時間上午10點自動跑
+  workflow_dispatch:      # 支援手動觸發
+
+jobs:
+  spider:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout Repository
+      uses: actions/checkout@v4
+
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.11'
+
+    - name: Install Dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install requests beautifulsoup4
+
+    - name: Run Static Spider
+      run: python static.py
+
+    - name: Run API Spider
+      run: python api.py
+
+    - name: Upload Output Files
+      uses: actions/upload-artifact@v4
+      with:
+        name: spider-results
+        path: |
+          static.json
+          static.csv
+          api.csv
