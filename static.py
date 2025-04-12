@@ -4,7 +4,7 @@ import json
 import csv
 
 # 要爬取的網站URL
-url = "https://www.ptt.cc/bbs/miHoYo/index.html"
+url = "https://www.youtube.com/"
 
 # 模擬瀏覽器的 headers
 headers = {
