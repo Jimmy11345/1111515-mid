@@ -3,7 +3,7 @@ from bs4 import BeautifulSoup
 import csv
 
 # PTT miHoYo 板網址
-url = "https://www.youtube.com/"
+url = "https://www.ptt.cc/bbs/miHoYo/index.html"
 
 # 模擬瀏覽器 headers
 headers = {
