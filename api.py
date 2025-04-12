@@ -5,11 +5,16 @@ import csv
 # PTT miHoYo 板網址
 url = "https://www.ptt.cc/bbs/miHoYo/index.html"
 
-# 設定cookie，PTT需要同意年滿18歲才能訪問
+# 模擬瀏覽器 headers
+headers = {
+    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/122.0.0.0 Safari/537.36'
+}
+
+# PTT需要同意年滿18歲
 cookies = {'over18': '1'}
 
 # 發送請求
-response = requests.get(url, cookies=cookies)
+response = requests.get(url, headers=headers, cookies=cookies)
 
 # 確認是否成功
 if response.status_code == 200:
