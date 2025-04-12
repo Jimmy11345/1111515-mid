@@ -17,7 +17,7 @@ jobs:
       - name: Setup Python
         uses: actions/setup-python@v4.5.0
         with:
-          python-version: "3.13.3"
+          python-version: "3.10"
       - name: Install Python Dependency
         run: pip3 install requests
       - name: Run crawler.py  # 前面都是在安裝 Python 環境，這裡才是真的去執行 crawler.py 的程式
