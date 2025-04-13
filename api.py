@@ -17,7 +17,7 @@ over18_url = "https://www.ptt.cc/ask/over18"
 session.post(over18_url, headers=headers, data={'yes': 'yes'})
 
 # 然後才進入版面
-url = "https://www.ptt.cc/bbs/miHoYo/index.html"
+url = "https://www.ptt.cc/bbs/index.html"
 response = session.get(url, headers=headers)
 
 if response.status_code == 200:
