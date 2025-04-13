@@ -40,3 +40,5 @@ if response.status_code == 200:
     print("已完成爬取，結果儲存在：api.csv！")
 else:
     print(f"請求失敗，狀態碼：{response.status_code}")
+    with open('response_debug.html', 'w', encoding='utf-8') as f:
+        f.write(response.text)
