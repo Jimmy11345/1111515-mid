@@ -8,7 +8,7 @@ from urllib.parse import urljoin  # 用來處理相對路徑
 url = "https://www.ptt.cc/bbs/miHoYo/index.html"
 
 # 用 session 保持 Cookie（處理 over18）
-session = requests.Session()
+#session = requests.Session()
 
 # 模擬瀏覽器的 headers
 headers = {
@@ -18,7 +18,7 @@ headers = {
 }
 
 # 模擬滿18歲的確認
-session.post("https://www.ptt.cc/ask/over18", headers=headers, data={'yes': 'yes'})
+#session.post("https://www.ptt.cc/ask/over18", headers=headers, data={'yes': 'yes'})
 
 # 發送請求
 response = session.get(url, headers=headers)
