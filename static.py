@@ -36,4 +36,4 @@ if response.status_code == 200:
     print("✅ 爬蟲完成，已儲存到 output/ 資料夾！")
 else:
     print(f"❌ 請求失敗，狀態碼：{response.status_code}")
-    exit(1)
+    
