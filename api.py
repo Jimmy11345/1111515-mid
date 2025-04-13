@@ -11,6 +11,9 @@ url = 'https://www.ptt.cc/bbs/miHoYo/index.html'
 # 發送請求並處理
 response = scraper.get(url)
 
+# 設定正確的編碼方式
+response.encoding = 'utf-8'  # 或者你可以嘗試 'big5' 這是 PTT 頁面可能的編碼格式
+
 # 解析頁面
 soup = BeautifulSoup(response.text, 'html.parser')
 
