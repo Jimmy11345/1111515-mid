@@ -1,4 +1,4 @@
-name: Run Spider
+name: Spider
 
 on:
   workflow_dispatch:  # 手動執行
@@ -35,7 +35,4 @@ jobs:
       uses: actions/upload-artifact@v4
       with:
         name: spider-results
-        path: |
-          static.csv
-          static.json
-          api.csv
+        path: output/
