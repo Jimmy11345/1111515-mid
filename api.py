@@ -25,12 +25,10 @@ if response.status_code == 200:
 
         data_list.append({'player': name, 'at_bats': at_bats, 'hits': hits, 'avg': avg})
 
-    # 輸出成 JSON 檔案
-    with open('mlb_api.json', 'w', encoding='utf-8') as f:
-        json.dump(data_list, f, ensure_ascii=False, indent=4)
+    
 
     # 輸出成 CSV 檔案
-    with open('mlb_api.csv', 'w', newline='', encoding='utf-8-sig') as f:
+    with open('api.csv', 'w', newline='', encoding='utf-8-sig') as f:
         writer = csv.DictWriter(f, fieldnames=['player', 'at_bats', 'hits', 'avg'])
         writer.writeheader()
         writer.writerows(data_list)
