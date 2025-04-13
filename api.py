@@ -1,39 +1,27 @@
 import requests
-import json
 import csv
+import os
 
-# MLB 官方打擊數據API
-url = "https://statsapi.mlb.com/api/v1/stats?stats=season&group=hitting&limit=100"
+# 發送 GET 請求，從高雄市開放資料平台獲取資料
+web = requests.get('https://data.kcg.gov.tw/dataset/6f29f6f4-2549-4473-aa90-bf60d10895dc/resource/30dfc2cf-17b5-4a40-8bb7-c511ea166bd3/download/lightrailtraffic.json')
 
-# 發送GET請求
-response = requests.get(url)
-
-# 檢查回應狀態
-if response.status_code == 200:
-    data = response.json()
-
-    # 取得球員數據區塊
-    stats = data.get('stats', [])[0].get('splits', [])
-
-    data_list = []
-
-    for player in stats:
-        name = player['player']['fullName']                      # 球員姓名
-        at_bats = player['stat'].get('atBats', 0)                # 打數
-        hits = player['stat'].get('hits', 0)                     # 安打
-        avg = player['stat'].get('avg', 0)                       # 打擊率
-
-        data_list.append({'player': name, 'at_bats': at_bats, 'hits': hits, 'avg': avg})
-
+# 如果請求成功
+if web.status_code == 200:
+    data = web.json()  # 解析 JSON 資料
     
+    if isinstance(data, list):
+        fieldnames = data[0].keys()  # 依據第一筆資料的 key 作為欄位名稱
 
-    # 輸出成 CSV 檔案
-    with open('api.csv', 'w', newline='', encoding='utf-8-sig') as f:
-        writer = csv.DictWriter(f, fieldnames=['player', 'at_bats', 'hits', 'avg'])
-        writer.writeheader()
-        writer.writerows(data_list)
+        os.makedirs('output', exist_ok=True)
+        csv_filename = 'output/api.csv'
 
-    print(f"✅ 已成功抓取 {len(data_list)} 筆 MLB 球員數據，儲存完成！")
+        with open(csv_filename, 'w', newline='', encoding='utf-8-sig') as f:
+            writer = csv.DictWriter(f, fieldnames=fieldnames)
+            writer.writeheader()
+            writer.writerows(data)
 
+        print("✅ 資料已成功儲存為 CSV 檔案！")
+    else:
+        print("❌ 無法處理該 JSON 格式，資料不是列表型別。")
 else:
-    print(f"❌ 請求失敗，狀態碼：{response.status_code}")
+    print(f"❌ 資料請求失敗，狀態碼：{web.status_code}")
