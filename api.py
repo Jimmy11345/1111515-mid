@@ -6,10 +6,15 @@ url = "https://www.ptt.cc/bbs/miHoYo/index.html"
 
 headers = {
     'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)',
-    'Origin': 'https://term.ptt.cc'
+    'Origin': 'https://www.ptt.cc',
+    'Referer': 'https://www.ptt.cc',
 }
 
-response = requests.get(url, headers=headers)
+cookies = {
+    'over18': '1'
+}
+
+response = requests.get(url, headers=headers, cookies=cookies)
 
 if response.status_code == 200:
     soup = BeautifulSoup(response.text, 'html.parser')
