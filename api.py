@@ -2,7 +2,7 @@ import requests
 from bs4 import BeautifulSoup
 import csv
 
-url = "https://www.ptt.cc/bbs/LoL/index.html"
+url = "https://www.ptt.cc/bbs/miHoYo/index.html"
 
 headers = {
     'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)',
