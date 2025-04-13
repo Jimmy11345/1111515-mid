@@ -13,10 +13,13 @@ jobs:
     - name: Checkout Repository
       uses: actions/checkout@v4
 
+    - name: Show Public IP (debug)
+      run: curl ifconfig.me
+
     - name: Set up Python
       uses: actions/setup-python@v5
       with:
-        python-version: '3.13.3'
+        python-version: '3.x'  # 改成穩定版
 
     - name: Install Dependencies
       run: |
@@ -30,6 +33,7 @@ jobs:
       run: python api.py
 
     - name: Upload Output Files
+      if: always()
       uses: actions/upload-artifact@v4
       with:
         name: spider-results
