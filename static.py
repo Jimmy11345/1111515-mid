@@ -6,7 +6,15 @@ from urllib.parse import urljoin
 
 url = "https://www.ptt.cc/bbs/miHoYo/index.html"
 
-response = requests.get(url)
+# 🧠 加上 cookie 模擬「我已滿 18 歲」
+cookies = {'over18': '1'}
+
+# 🔍 可選：加上 headers 模擬瀏覽器，更不容易被擋
+headers = {
+    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36'
+}
+
+response = requests.get(url, cookies=cookies, headers=headers)
 
 if response.status_code == 200:
     soup = BeautifulSoup(response.text, 'html.parser')
