@@ -1,33 +1,41 @@
-name: PTT Web Scraper
+name: Run Spider
 
 on:
-  push:
-    branches:
-      - main
+  workflow_dispatch:  # 手動執行
+  schedule:
+    - cron: '0 0 * * *'  # 每天 UTC 00:00 = 台灣時間 08:00
 
 jobs:
-  scrape:
+  run-spider:
     runs-on: ubuntu-latest
 
     steps:
-    - name: 📥 Checkout code
+    - name: Checkout repository
       uses: actions/checkout@v3
 
-    - name: 🐍 Set up Python
+    - name: Set up Python
       uses: actions/setup-python@v4
       with:
         python-version: '3.10'
 
-    - name: 📦 Install dependencies
+    - name: Install dependencies
       run: |
-        pip install requests beautifulsoup4
+        python -m pip install --upgrade pip
+        if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
 
-    - name: 🕷 Run scraper
-      run: python scraper.py
-    - name: 📦 Upload artifacts
+    - name: Run static spider
+      run: |
+        python static.py
+
+    - name: Run API spider
+      run: |
+        python api.py
+
+    - name: Upload output files
       uses: actions/upload-artifact@v3
       with:
-        name: scraped-data
-        path: output/
-    
-   
+        name: spider-results
+        path: |
+          static.csv
+          static.json
+          api.csv
