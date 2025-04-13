@@ -12,7 +12,7 @@ headers = {
 }
 
 # 送出同意滿18歲的請求
-session.post("https://www.ptt.cc/ask/over18", headers=headers, data={'yes': 'yes'})
+#session.post("https://www.ptt.cc/ask/over18", headers=headers, data={'yes': 'yes'})
 
 # 指定要爬的 PTT 看板
 url = "https://www.ptt.cc/bbs/miHoYo/index.html"
