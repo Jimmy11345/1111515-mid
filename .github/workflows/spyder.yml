@@ -24,9 +24,10 @@ jobs:
 
     - name: 🕷 Run scraper
       run: python scraper.py
-
     - name: 📦 Upload artifacts
       uses: actions/upload-artifact@v3
       with:
         name: scraped-data
         path: output/
+    
+   
