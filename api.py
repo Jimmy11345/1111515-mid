@@ -1,34 +1,41 @@
-import cloudscraper
-from bs4 import BeautifulSoup
+import requests
+import json
 import csv
 
-# 建立 CloudScraper 物件
-scraper = cloudscraper.create_scraper()
+# MLB 官方打擊數據API
+url = "https://statsapi.mlb.com/api/v1/stats?stats=season&group=hitting&limit=100"
 
-# 目標 URL
-url = 'https://www.ptt.cc/bbs/miHoYo/index.html'
+# 發送GET請求
+response = requests.get(url)
 
-# 發送請求並處理
-response = scraper.get(url)
+# 檢查回應狀態
+if response.status_code == 200:
+    data = response.json()
 
-# 設定正確的編碼方式
-response.encoding = 'utf-8'  # 或者你可以嘗試 'big5' 這是 PTT 頁面可能的編碼格式
+    # 取得球員數據區塊
+    stats = data.get('stats', [])[0].get('splits', [])
 
-# 解析頁面
-soup = BeautifulSoup(response.text, 'html.parser')
+    data_list = []
 
-# 假設我們要抓取所有文章的標題
-titles = soup.find_all('div', class_='title')
+    for player in stats:
+        name = player['player']['fullName']                      # 球員姓名
+        at_bats = player['stat'].get('atBats', 0)                # 打數
+        hits = player['stat'].get('hits', 0)                     # 安打
+        avg = player['stat'].get('avg', 0)                       # 打擊率
 
-# 打開 CSV 檔案，準備寫入數據
-with open('api.csv', mode='w', newline='', encoding='utf-8') as file:
-    writer = csv.writer(file)
+        data_list.append({'player': name, 'at_bats': at_bats, 'hits': hits, 'avg': avg})
 
-    # 寫入表頭
-    writer.writerow(['Title'])
+    # 輸出成 JSON 檔案
+    with open('mlb_api.json', 'w', encoding='utf-8') as f:
+        json.dump(data_list, f, ensure_ascii=False, indent=4)
 
-    # 寫入每個標題
-    for title in titles:
-        writer.writerow([title.text.strip()])
+    # 輸出成 CSV 檔案
+    with open('mlb_api.csv', 'w', newline='', encoding='utf-8-sig') as f:
+        writer = csv.DictWriter(f, fieldnames=['player', 'at_bats', 'hits', 'avg'])
+        writer.writeheader()
+        writer.writerows(data_list)
 
-print("Data has been written to api.csv.")
+    print(f"✅ 已成功抓取 {len(data_list)} 筆 MLB 球員數據，儲存完成！")
+
+else:
+    print(f"❌ 請求失敗，狀態碼：{response.status_code}")
