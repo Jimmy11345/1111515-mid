@@ -6,9 +6,9 @@ import datetime
 session = requests.Session()
 
 headers = {
-    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/122.0.0.0 Safari/537.36',
-    'Referer': 'https://www.google.com/',
-    'Accept-Language': 'zh-TW,zh;q=0.9'
+    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)',
+    'Referer': 'https://www.ptt.cc/',
+    'Origin': 'https://term.ptt.cc',  # 加這個就能成功
 }
 
 # 送出同意滿18歲的請求
