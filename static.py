@@ -1,39 +1,32 @@
 import requests
-from bs4 import BeautifulSoup
 import json
 import csv
-import os
 
-url = "https://www.dcard.tw/f/yzu"
+# MLB 官方 stats API
+url = "https://statsapi.mlb.com/api/v1/stats?stats=season&group=hitting&limit=100"
 
-headers = {
-    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36'
-}
-
-response = requests.get(url, headers=headers)
+response = requests.get(url)
 
 if response.status_code == 200:
-    soup = BeautifulSoup(response.text, 'html.parser')
-    data_list = []
+    data = response.json()  # 取得 JSON 資料
 
-    articles = soup.find_all('a', class_='tgn9uw-0')
-    for article in articles[:10]:  # 限前10篇
-        title = article.text.strip()
-        href = article['href']
-        full_url = f"https://www.dcard.tw{href}"
-        data_list.append({'title': title, 'url': full_url})
+    # 這裡可以根據API返回格式，取出選手成績
+    stats = data.get('stats', [])[0].get('splits', [])
 
-    os.makedirs('output', exist_ok=True)
+    # 準備寫入CSV
+    with open('mlb_stats.csv', 'w', newline='', encoding='utf-8-sig') as f:
+        writer = csv.writer(f)
+        writer.writerow(['選手', '打數', '安打', '打擊率'])  # 範例表頭
 
-    with open('output/dcard.json', 'w', encoding='utf-8') as f:
-        json.dump(data_list, f, ensure_ascii=False, indent=4)
+        for player in stats:
+            name = player['player']['fullName']
+            atBats = player['stat'].get('atBats', 0)
+            hits = player['stat'].get('hits', 0)
+            avg = player['stat'].get('avg', 0)
 
-    with open('output/dcard.csv', 'w', newline='', encoding='utf-8-sig') as f:
-        writer = csv.DictWriter(f, fieldnames=['title', 'url'])
-        writer.writeheader()
-        writer.writerows(data_list)
+            writer.writerow([name, atBats, hits, avg])
 
-    print("✅ 爬蟲完成，已儲存到 output/ 資料夾！")
+    print(f"已成功抓取 {len(stats)} 筆 MLB 球員數據，結果已儲存到 mlb_stats.csv！")
+
 else:
-    print(f"❌ 請求失敗，狀態碼：{response.status_code}")
-    
+    print(f"請求失敗，狀態碼：{response.status_code}")
